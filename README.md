@@ -4,6 +4,7 @@
 **Autor:** Edgar O. Herrera Logrono, M.Sc. en Inteligencia Artificial, VIU Espana  
 **Programa:** Doctorado en Tecnologias Informaticas, Universidad de Malaga  
 **Version:** v1.0 | **Fecha:** 2026-05-10
+**Version:** v1.0 | **Fecha:** 2026-05-10
 **Doctoral supervisors:** Department of Languages and Computer Science, Universidad de Malaga 
 **Entorno:** Google Colab (Python 3.10+)
 
