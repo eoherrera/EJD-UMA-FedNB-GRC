@@ -8,13 +8,13 @@
 
 ---
 
-## Por que este trabajo es diferente
+## Por que este trabajo es diferente?
 
 Los sistemas de aprendizaje federado existentes combinan modelos locales sin considerar quien los produce. Un banco con controles de seguridad maduros y auditados contribuye igual que una entidad con controles debiles. Eso ignora informacion de gobernanza que ya existe y que las organizaciones han tardado anos en construir.
 
 Este trabajo propone una respuesta concreta: las variables del marco CRISC de ISACA, usadas habitualmente en auditorias de riesgo, pueden convertirse en un regularizador matematico que guia cuanto pesa cada participante en el servidor federado. El resultado es un sistema de deteccion de intrusiones que aprende mas de quienes mas saben protegerse, sin que nadie comparta sus datos.
 
-**Eso no se habia hecho antes.**
+**En trabajos investigativos revisados, se observa que no se habia hecho antes.**
 
 ---
 
