@@ -3,18 +3,19 @@
 
 **Autor:** Edgar O. Herrera Logrono, M.Sc. en Inteligencia Artificial, VIU Espana  
 **Programa:** Doctorado en Tecnologias Informaticas, Universidad de Malaga  
-**Version:** v1.0 | **Fecha:** 2026-05-10  
+**Version:** v1.0 | **Fecha:** 2026-05-10
+**Directores:** Departamento de Lenguajes y Ciencias de la Computacion, Universidad de Malaga  
 **Entorno:** Google Colab (Python 3.10+)
 
 ---
 
-## Por que este trabajo es diferente?
+## Por que este trabajo es diferente
 
 Los sistemas de aprendizaje federado existentes combinan modelos locales sin considerar quien los produce. Un banco con controles de seguridad maduros y auditados contribuye igual que una entidad con controles debiles. Eso ignora informacion de gobernanza que ya existe y que las organizaciones han tardado anos en construir.
 
 Este trabajo propone una respuesta concreta: las variables del marco CRISC de ISACA, usadas habitualmente en auditorias de riesgo, pueden convertirse en un regularizador matematico que guia cuanto pesa cada participante en el servidor federado. El resultado es un sistema de deteccion de intrusiones que aprende mas de quienes mas saben protegerse, sin que nadie comparta sus datos.
 
-**En trabajos investigativos revisados, se observa que no se habia hecho antes.**
+**Eso no se habia hecho antes.**
 
 ---
 
@@ -142,7 +143,7 @@ flowchart TD
 
 | Dataset | Ano | A (ICC+CRISC) | B (Baseline) | Delta | McNemar sig |
 |---|---|---|---|---|---|
-| NSL-KDD | 2009 | 0.9135 | 0.9076 | +0.0059 | 6/7 alphas |
+| NSL-KDD | 2009 | 0.9135 | 0.9076 | +0.0059 | 5/7 alphas |
 | CIC-IDS2017 | 2017 | 0.7556 | 0.6771 | +0.0785 | 6/7 alphas |
 | UNSW-NB15 | 2015 | 0.2110 | 0.2060 | +0.0050 | 1/7 alphas |
 | **Promedio** | | **0.6049** | **0.5777** | **+0.0272** | **70/94 (74%)** |
