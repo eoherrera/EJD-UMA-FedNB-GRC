@@ -15,7 +15,7 @@ Los sistemas de aprendizaje federado existentes combinan modelos locales sin con
 
 Este trabajo propone una respuesta concreta: las variables del marco CRISC de ISACA, usadas habitualmente en auditorias de riesgo, pueden convertirse en un regularizador matematico que guia cuanto pesa cada participante en el servidor federado. El resultado es un sistema de deteccion de intrusiones que aprende mas de quienes mas saben protegerse, sin que nadie comparta sus datos.
 
-**Los trabajos de investigacion revisados en diferentes fechas, si identifió que nuestra propuesta no se habia hecho antes.**
+**Los trabajos de investigacion revisados en diferentes fechas, se identifico que nuestra propuesta es unica.**
 
 ---
 
