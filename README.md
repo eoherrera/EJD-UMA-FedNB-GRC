@@ -74,112 +74,104 @@ Este programa es el resultado de un proceso iterativo conducido junto con los di
 
 ```mermaid
 flowchart TD
-    A([INICIO]) --> B
+    classDef proceso  fill:#EBF3FB,stroke:#2E75B6,stroke-width:2px,color:#1a1a1a
+    classDef decision fill:#FFF8E1,stroke:#F9A825,stroke-width:2px,color:#1a1a1a
+    classDef exito    fill:#E8F5E9,stroke:#43A047,stroke-width:2px,color:#1a1a1a
+    classDef alerta   fill:#FCE4D6,stroke:#C55A11,stroke-width:2px,color:#1a1a1a
+    classDef terminal fill:#1565C0,stroke:#0D47A1,stroke-width:2px,color:#ffffff
 
-    subgraph SEC0 ["Sec. 0 · Parametros CRISC"]
-        B["CMM · KCI · KRI · CVSS
+    INICIO([INICIO]):::terminal --> B
+
+    subgraph SEC0 ["Sec. 0  Parametros CRISC"]
+        B["CMM  KCI  KRI  CVSS
         ICC por nodo institucional
-        SEMILLA=42 · REPS=5 · 7 alphas Dirichlet"]
+        SEMILLA=42  REPS=5  7 alphas Dirichlet"]:::proceso
     end
 
     SEC0 --> SEC12
 
-    subgraph SEC12 ["Sec. 1-3 · Entorno · Carga · Auditoria"]
-        C["NSL-KDD (2009) desde GitHub
-        CIC-IDS2017 (2017) desde Kaggle Parquet
-        UNSW-NB15 (2015) desde Kaggle CSV
-        Limpieza · Auditoria 5 puntos · Submuestreo"]
+    subgraph SEC12 ["Sec. 1-3  Entorno  Carga  Auditoria"]
+        C["NSL-KDD 2009  CIC-IDS2017 2017  UNSW-NB15 2015
+        Limpieza  Auditoria 5 puntos
+        Submuestreo estratificado CIC-IDS2017"]:::proceso
     end
 
-    SEC12 --> SEC4
+    SEC12 --> D
 
-    subgraph SEC4 ["Sec. 4 · Protocolo de Verificacion"]
-        D{{"ICC formula · Semilla · Alphas · Split
-        DETIENE si algo no coincide con
-        los parametros acordados"}}
-    end
+    D{{"Sec. 4  Protocolo de Verificacion
+    ICC formula  Semilla  Alphas  Split"}}:::decision
 
     D -->|Aprobado| SEC5
-    D -->|Fallo| ERR([ERROR: corregir en Sec.0])
+    D -->|Fallo| CORR1
 
-    subgraph SEC5 ["Sec. 5 · Preprocesado Hibrido"]
+    CORR1["Corregir parametros en Sec.0
+    y volver a ejecutar"]:::alerta
+    CORR1 --> B
+
+    subgraph SEC5 ["Sec. 5  Preprocesado Hibrido"]
         E["Categoricas: OrdinalEncoder + CategoricalNB
         Numericas: StandardScaler + GaussianNB
-        Slot OOD activo · Sin fuga de datos"]
+        Slot OOD activo  Sin fuga de datos"]:::proceso
     end
 
     SEC5 --> SEC6
 
-    subgraph SEC6 ["Sec. 6 · Modelo Federado y Servidor MoG"]
-        F["Dirichlet separa datos en 3 nodos
+    subgraph SEC6 ["Sec. 6  Modelo Federado y Servidor MoG"]
+        F["Dirichlet distribuye datos en 3 nodos
         Cada nodo entrena NaiveBayesHibrido local
-        Servidor combina densidades (MoG real)
-        Nelder-Mead aprende pesos con prior ICC-CRISC"]
+        Servidor combina densidades MoG real
+        Nelder-Mead aprende pesos con prior ICC-CRISC"]:::proceso
     end
 
     SEC6 --> SEC7
 
-    subgraph SEC7 ["Sec. 7 · Metricas"]
-        G["F1-macro · ANLL normalizado
-        Test de McNemar · Jensen-Shannon
-        ICC Alignment por nodo"]
+    subgraph SEC7 ["Sec. 7  Metricas"]
+        G["F1-macro  ANLL normalizado
+        Test de McNemar  Jensen-Shannon
+        ICC Alignment por nodo"]:::proceso
     end
 
     SEC7 --> SEC8
 
-    subgraph SEC8 ["Sec. 8 · Experimento Multi-Dataset"]
-        H["5 reps x 7 alphas x 4 propuestas
-        C: centralizado (techo teorico)
-        B: FedAvg (baseline estandar)
-        E: ponderacion por entropia
-        A: ICC-CRISC (propuesta principal)"]
+    subgraph SEC8 ["Sec. 8  Experimento Multi-Dataset"]
+        H["5 reps  x  7 alphas  x  4 propuestas
+        C: centralizado  B: FedAvg baseline
+        E: entropia  A: ICC-CRISC propuesta principal
+        376 configuraciones evaluadas"]:::proceso
     end
 
     SEC8 --> SEC9
 
-    subgraph SEC9 ["Sec. 9 · 5 Figuras Numeradas"]
+    subgraph SEC9 ["Sec. 9  5 Figuras Numeradas"]
         I["Fig.1 Gradiente de heterogeneidad
         Fig.2 ICC Alignment con tabla CRISC
         Fig.3 Pesos aprendidos por nodo
-        Fig.4 ICC Alignment cruzado - 3 datasets
-        Fig.5 Densidades MoG por nodo institucional"]
+        Fig.4 ICC Alignment cruzado 3 datasets
+        Fig.5 Densidades MoG por nodo institucional"]:::proceso
     end
 
-    SEC9 --> STRESS
+    SEC9 --> J
 
-    subgraph STRESS ["Protocolo-Stress · 15 Verificaciones Automaticas"]
-        J{{"ICC · Semilla · Alphas · OOD · MoG
-        ANLL · F1 · Pesos · McNemar · JS
-        Alignment · A mayor que B · sin NaN
-        DETIENE si alguna verificacion falla"}}
-    end
+    J{{"Protocolo-Stress  15 Verificaciones Automaticas
+    ICC  Semilla  Alphas  OOD  MoG  ANLL
+    F1  Pesos  McNemar  JS  Alignment  NaN"}}:::decision
 
     J -->|15/15 OK| RES
-    J -->|Fallo| ERR2([ERROR: resultados no aptos])
+    J -->|Fallo| CORR2
+
+    CORR2["Revisar verificacion fallida
+    Corregir en la seccion correspondiente
+    y volver a ejecutar desde Sec.8"]:::alerta
+    CORR2 --> SEC8
 
     subgraph RES ["Resumen y Conclusiones"]
         K["Tablas F1 y ANLL por dataset y propuesta
         McNemar A vs B por alpha y dataset
         5 conclusiones generadas automaticamente
-        desde resultados reales"]
+        desde resultados reales verificados"]:::exito
     end
 
-    RES --> Z([CIERRE])
-
-    style A fill:#2E75B6,color:#fff,stroke:none
-    style Z fill:#2E75B6,color:#fff,stroke:none
-    style ERR fill:#C55A11,color:#fff,stroke:none
-    style ERR2 fill:#C55A11,color:#fff,stroke:none
-    style SEC0 fill:#EBF3FB,stroke:#2E75B6,stroke-width:2px
-    style SEC12 fill:#EBF3FB,stroke:#2E75B6,stroke-width:2px
-    style SEC4 fill:#FFF2CC,stroke:#F0A500,stroke-width:2px
-    style SEC5 fill:#EBF3FB,stroke:#2E75B6,stroke-width:2px
-    style SEC6 fill:#E2EFDA,stroke:#70AD47,stroke-width:2px
-    style SEC7 fill:#EBF3FB,stroke:#2E75B6,stroke-width:2px
-    style SEC8 fill:#E2EFDA,stroke:#70AD47,stroke-width:2px
-    style SEC9 fill:#EBF3FB,stroke:#2E75B6,stroke-width:2px
-    style STRESS fill:#FFF2CC,stroke:#F0A500,stroke-width:2px
-    style RES fill:#E2EFDA,stroke:#70AD47,stroke-width:2px
+    RES --> CIERRE([CIERRE]):::terminal
 ```
 
 ---
