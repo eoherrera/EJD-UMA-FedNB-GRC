@@ -177,7 +177,7 @@ La Fig. 4 resume mejor el resultado: en los tres datasets, el nodo con mas contr
 
 ---
 
-## Cómo ejecutar?
+## Como ejecutar?
 
 1. Abrir `EJD_UMA_FedNB_GRC_v1.0.ipynb` en Google Colab
 2. Subir `kaggle.json` cuando lo solicite la primera celda
@@ -202,7 +202,7 @@ Sec.5 > Sec.6 > Sec.7 > Sec.8 > Sec.9 >
 Protocolo-Stress > Resumen > Conclusiones
 ```
 
-El orden no es opcional. Cada seccion depende de las anteriores.
+El orden de ejecucion no es opcional. Cada seccion depende de las anteriores.
 
 ---
 
