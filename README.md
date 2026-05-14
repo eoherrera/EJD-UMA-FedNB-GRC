@@ -1,7 +1,7 @@
 # EJD-UMA-FedNB-GRC
 ## Aprendizaje Federado con Gobernanza Institucional GRC para Deteccion de Intrusiones
 
-**Autor:** Edgar O. Herrera Logrono, M.Sc. en Inteligencia Artificial, VIU Espana  
+**Autor:** Edgar Oswaldo Herrera Logrono, M.Sc. en Inteligencia Artificial, VIU Espana  
 **Programa:** Doctorado en Tecnologias Informaticas, Universidad de Malaga  
 **Directores:** Departamento de Lenguajes y Ciencias de la Computacion, Universidad de Malaga  
 **Version:** v1.0 | **Fecha:** 2026-05-10  
@@ -10,13 +10,13 @@
 
 ---
 
-## Por que este trabajo es diferente
+## Por qué este trabajo es diferente?
 
 Los sistemas de aprendizaje federado existentes combinan modelos locales sin considerar quien los produce. Un banco con controles de seguridad maduros y auditados contribuye igual que una entidad con controles debiles. Eso ignora informacion de gobernanza que ya existe y que las organizaciones han tardado anos en construir.
 
 Este trabajo convierte cuatro variables del marco CRISC de ISACA, usadas habitualmente en auditorias de riesgo, en un regularizador matematico que guia cuanto pesa cada participante en el servidor federado. El resultado es un detector de intrusiones que aprende mas de quienes mas saben protegerse, sin que nadie comparta sus datos de red.
 
-**Eso no se habia hecho antes.**
+**En trabajos indagados en esta linea, no se encontró una propuesta igual a la presente.**
 
 ---
 
