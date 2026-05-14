@@ -177,7 +177,7 @@ La Fig. 4 resume mejor el resultado: en los tres datasets, el nodo con mas contr
 
 ---
 
-## Como ejecutar
+## Cómo ejecutar?
 
 1. Abrir `EJD_UMA_FedNB_GRC_v1.0.ipynb` en Google Colab
 2. Subir `kaggle.json` cuando lo solicite la primera celda
