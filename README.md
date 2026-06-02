@@ -1,50 +1,52 @@
-# Federated Naive Bayes with Institutional Governance Regularization
+# Federated Naive Bayes with Real Mixture of Gaussians and Institutional Governance Regularization for Network Intrusion Detection
 
-**EJD-UMA-FedNB-GRC v2.3**  
-Edgar Oswaldo Herrera Logrono, M.Sc. IA, VIU Espana  
-Candidato Doctoral - Universidad de Malaga  
+**EJD-UMA-FedNB-GRC v2.4**  
+Edgar Oswaldo Herrera-Logroño  
+Doctoral Researcher, Universidad de Málaga, Spain  
+Senior Information Security Analyst, DNSIPD-IESS, Ecuador  
+ORCID: [0009-0000-3968-7397](https://orcid.org/0009-0000-3968-7397)
 
-
-Preprint: [arXiv:2605.18647](https://arxiv.org/abs/2605.18647)
-
----
-
-## La idea central
-
-En aprendizaje federado, el modelo compartido se construye promediando las contribuciones locales en proporcion al volumen de datos de cada nodo. Esa logica ignora un hecho que cualquier auditor conoce: no todos los nodos producen datos de igual calidad. Una institucion financiera con controles maduros y baja exposicion a vulnerabilidades genera senales distintas a una agencia de gobierno con controles debiles y alta frecuencia de alertas de riesgo.
-
-Este trabajo convierte ese conocimiento de auditoria en una senal matematica dentro del optimizador federado. Las variables de gobernanza del marco CRISC de ISACA (CMM, KCI, KRI, CVSS) se combinan en un Indice de Coherencia Institucional (ICC) que actua como prior de regularizacion en Nelder-Mead. El optimizador aprende los pesos de cada nodo desde los datos de validacion, orientado por ese prior, sin que se le imponga ningun orden explicito.
-
-El hallazgo central, denominado **ICC Alignment**, es que en los tres datasets evaluados el nodo con mayor madurez institucional recibio el mayor peso aprendido y el de menor madurez el menor. Ese patron emergio de los datos, no de una restriccion forzada.
+Preprint: [arXiv:2605.18647](https://arxiv.org/abs/2605.18647)  
+Submitted to: Journal of Network and Computer Applications (Elsevier)
 
 ---
 
-## Diagrama del proceso
+## Central idea
+
+Federated learning for intrusion detection rests on a flawed premise: that every participating institution contributes equally to the shared model. In practice, a financial institution with mature security controls and low vulnerability exposure produces fundamentally different data than a government agency operating with weaker controls and higher exposure. Treating their local models as equivalent discards information that organisations already collect through standard risk management audits.
+
+This work converts that audit knowledge into a mathematical signal inside the federated optimizer. Four governance indicators from the CRISC framework of ISACA (CMM, KCI, KRI, CVSS) are combined into an Institutional Coherence Index (ICC) that acts as a regularization prior in Nelder-Mead. The optimizer learns node weights from validation data, guided by that prior, without any explicit ordering constraint imposed.
+
+The central finding, termed **ICC Alignment**, is that in all three datasets evaluated, the node with the highest institutional maturity received the highest learned weight and the node with the lowest maturity received the lowest. That pattern emerged from the data, not from a forced constraint.
+
+---
+
+## Process diagram
 
 ```mermaid
 flowchart TD
-    A([Datos de red distribuidos]) --> B[Particion Dirichlet\npor nivel de heterogeneidad]
-    B --> C1[Nodo Financiero\nICC = 0.393]
-    B --> C2[Nodo Salud\nICC = 0.154]
-    B --> C3[Nodo Gobierno\nICC = 0.042]
+    A([Distributed network data]) --> B[Dirichlet partition\nby heterogeneity level]
+    B --> C1[Financial Node\nICC = 0.393]
+    B --> C2[Health Node\nICC = 0.154]
+    B --> C3[Government Node\nICC = 0.042]
 
-    C1 --> D1[CategoricalNB + GaussianNB\nentrenamiento local]
-    C2 --> D2[CategoricalNB + GaussianNB\nentrenamiento local]
-    C3 --> D3[CategoricalNB + GaussianNB\nentrenamiento local]
+    C1 --> D1[CategoricalNB + GaussianNB\nlocal training]
+    C2 --> D2[CategoricalNB + GaussianNB\nlocal training]
+    C3 --> D3[CategoricalNB + GaussianNB\nlocal training]
 
-    D1 --> E[Servidor MoG\nMezcla de Gaussianas real]
+    D1 --> E[MoG Server\nReal Mixture of Gaussians]
     D2 --> E
     D3 --> E
 
-    F([Variables CRISC\nCMM - KCI - KRI - CVSS]) --> G[ICC por nodo\nICCk = CMM/5 x KCI x 1-KRI x 1-CVSS/10]
-    G --> H[Nelder-Mead\n11 puntos de inicio\n800 iteraciones\nlambda = 0.10]
+    F([CRISC Variables\nCMM - KCI - KRI - CVSS]) --> G[ICC per node\nICCk = CMM/5 x KCI x 1-KRI x 1-CVSS/10]
+    G --> H[Nelder-Mead\n11 starting points\n800 iterations\nlambda = 0.10]
     E --> H
 
-    H --> I{Pesos aprendidos\nw1 - w2 - w3}
-    I -->|ICC Alignment| J[Financiero mayor peso\nGobierno menor peso\nen los 3 datasets]
-    I --> K[Prediccion final\nlog-sum-exp ponderado]
+    H --> I{Learned weights\nw1 - w2 - w3}
+    I -->|ICC Alignment| J[Financial highest weight\nGovernment lowest weight\nin all 3 datasets]
+    I --> K[Final prediction\nweighted log-sum-exp]
 
-    K --> L[Evaluacion\nF1-macro - ANLL - McNemar\nWilcoxon - ANLL por rasgo]
+    K --> L[Evaluation\nF1-macro - ANLL - McNemar\nWilcoxon - ANLL per feature]
 
     style A fill:#1a3a5c,color:#fff
     style J fill:#1a5c2a,color:#fff
@@ -54,85 +56,87 @@ flowchart TD
 
 ---
 
-## Resultados (10 repeticiones por configuracion, semilla 42)
+## Results (10 repetitions per configuration, seed 42)
 
-| Dataset | Ano | Registros | A - ICC-CRISC | B - FedAvg | Delta | McNemar sig |
-|---|---|---|---|---|---|---|
-| NSL-KDD | 2009 | 147,888 | 0.9035 | 0.8939 | +0.0096 | 6 de 7 alphas |
-| CIC-IDS2017 | 2017 | 100,000 | 0.7389 | 0.6686 | +0.0703 | 6 de 7 alphas |
-| UNSW-NB15 | 2015 | 257,673 | 0.2391 | 0.2303 | +0.0088 | 5 de 7 alphas |
-| **Promedio** | | | **0.6808** | **0.6486** | **+0.0322** | **137/157 (87%)** |
+| Dataset | Year | Records | A - ICC-CRISC | B - FedAvg | D - FedProx | ΔA-B | McNemar sig |
+|---|---|---|---|---|---|---|---|
+| NSL-KDD | 2009 | 147,888 | 0.9035 | 0.8939 | 0.8941 | +0.0096 | 4/7 alphas |
+| CIC-IDS2017 | 2017 | 100,000 | 0.7389 | 0.6686 | 0.6686 | +0.0703 | 5/7 alphas |
+| UNSW-NB15 | 2015 | 257,673 | 0.2391 | 0.2303 | 0.2302 | +0.0088 | 5/7 alphas |
+| **Combined avg.** | | | **0.6272** | **0.5976** | **0.5976** | **+0.0296** | **137/157 (87%)** |
 
-La mayor diferencia se observa en CIC-IDS2017, donde el desbalance de clases bajo particion Dirichlet favorece a la propuesta A. En NSL-KDD y UNSW-NB15 la ventaja es mas ajustada pero consistente.
+The largest margin occurs on CIC-IDS2017, where class imbalance under Dirichlet partitioning favors proposal A. On NSL-KDD and UNSW-NB15 the advantage is narrower but consistent across all heterogeneity levels.
 
-**Significancia estadistica adicional:**  
-La prueba de Wilcoxon signed-rank confirmo diferencia significativa (p < 0.05) en 7 de 16 combinaciones alpha-dataset evaluadas. El delta de efecto promedio fue de 0.548, lo que corresponde a un efecto de magnitud media-alta.
+**Additional statistical significance:**  
+The Wilcoxon signed-rank test confirmed significance (p < 0.05) in 7 of 16 alpha-dataset combinations evaluated. The mean Cliff's Delta was 0.548, corresponding to a medium-to-large effect size.
 
 **ICC Alignment:**  
-En los tres datasets, el nodo Financiero (ICC = 0.393) recibio un peso aprendido promedio de 0.371 y el nodo Gobierno (ICC = 0.042) un peso de 0.310. Esa jerarquia coincide con el orden del prior ICC en todos los casos.
+In all three datasets, the Financial node (ICC = 0.393) received the highest learned weight and the Government node (ICC = 0.042) the lowest, without any explicit ordering constraint in the objective function. This pattern held across datasets collected in different years by different research groups on different continents.
 
-**ANLL por rasgo:**  
-La propuesta A estima mejor la densidad de probabilidad que el baseline B en el 66.7% de los rasgos numericos evaluados sobre el conjunto de validacion.
+**Density estimation:**  
+Proposal A estimated the probability density better than baseline B in 66.7% of the numerical features evaluated on the validation set, pooled across all three datasets.
 
 ---
 
-## Variables CRISC por nodo institucional
+## CRISC governance variables per institutional node
 
-| Nodo | CMM | KCI | KRI | CVSS | ICC |
+| Node | CMM | KCI | KRI | CVSS | ICC |
 |---|---|---|---|---|---|
-| Financiero | 4 | 0.82 | 0.12 | 3.2 | 0.393 |
-| Salud | 3 | 0.70 | 0.25 | 5.1 | 0.154 |
-| Gobierno | 2 | 0.55 | 0.40 | 6.8 | 0.042 |
+| Financial | 4 | 0.82 | 0.12 | 3.2 | 0.393 |
+| Health | 3 | 0.70 | 0.25 | 5.1 | 0.154 |
+| Government | 2 | 0.55 | 0.40 | 6.8 | 0.042 |
 
-ICC_k = (CMM/5) x KCI x (1 - KRI) x (1 - CVSS/10)
-
----
-
-## Contribuciones
-
-**Contribucion del autor:**  
-La idea de formalizar las variables de gobernanza institucional del marco CRISC como prior de regularizacion en un optimizador federado. Ese paso, combinar lo que las organizaciones ya miden en sus auditorias de riesgo con el proceso de aprendizaje del modelo compartido, no habia sido explorado en la literatura previa sobre aprendizaje federado para deteccion de intrusiones.
-
-**Contribuciones de los directores:**  
-- Prof. Lopez Rubio: arquitectura de servidor como Mezcla de Gaussianas real, sin colapsar distribuciones locales en un vector global; normalizacion log-softmax dentro del objetivo del optimizador para igualar escalas entre ANLL e ICC; gradiente de heterogeneidad en 7 niveles Dirichlet; analisis ANLL por rasgo sobre el conjunto de validacion.
-- Prof. Ortiz de Lazcano: correccion del slot OOD (valores categoricos desconocidos van a n_cats[j], no a n_cats[j]-1); gestion del doble conteo del prior en la verosimilitud combinada.
+ICC_k = (CMM/5) × KCI × (1 − KRI) × (1 − CVSS/10)
 
 ---
 
-## Parametros del experimento
+## Experimental parameters
 
-| Parametro | Valor |
+| Parameter | Value |
 |---|---|
-| Repeticiones | 10 por configuracion |
-| Alphas Dirichlet | 0.05 / 0.10 / 0.20 / 0.30 / 0.50 / 0.70 / 1.00 |
-| Semilla | 42 |
-| Split | Train 60% - Val 20% - Test 20% |
-| Optimizador | Nelder-Mead, 11 puntos de inicio, 800 iteraciones |
-| Muestras de validacion para optimizacion | 3,000 |
-| Regularizador | L2, lambda = 0.10 |
-| Piso de peso por nodo | 0.05 |
+| Repetitions | 10 per configuration |
+| Dirichlet alphas | 0.05 / 0.10 / 0.20 / 0.30 / 0.50 / 0.70 / 1.00 |
+| Random seed | 42 |
+| Split | Train 60% / Val 20% / Test 20% |
+| Optimizer | Nelder-Mead, 11 starting points, 800 iterations |
+| Validation samples for optimization | 3,000 |
+| Regularizer | L2, lambda = 0.10 |
+| Minimum weight floor per node | 0.05 |
 
 ---
 
-## Como ejecutar
+## Datasets
 
-El notebook esta organizado en secciones etiquetadas. El orden de ejecucion es:
+All three datasets are publicly available:
 
-CELDA1 (Google Drive) > CELDA2 (Kaggle) > KEEPALIVE > SEC0 > SEC1 > SEC2 > SEC3 > SEC4 > SEC5 > SEC6 > SEC7 > SEC8DEF > SEC8EXEC > SEC9 > STRESS > RESUMEN > CONCLUSIONES
-
-Los resultados se guardan en Google Drive al terminar cada dataset. Si la sesion de Colab se interrumpe, los checkpoints conservan los datos ya calculados.
+- **NSL-KDD (2009):** https://www.unb.ca/cic/datasets/nsl.html
+- **CIC-IDS2017 (2017):** https://www.unb.ca/cic/datasets/ids-2017.html
+- **UNSW-NB15 (2015):** https://research.unsw.edu.au/projects/unsw-nb15-dataset
 
 ---
 
-## Citar este trabajo
+## How to run
+
+The notebook is organized in labeled sections. Execution order:
+
+CELDA1 (Google Drive) → CELDA2 (Kaggle) → KEEPALIVE → SEC0 → SEC1 → SEC2 → SEC3 → SEC4 → SEC5 → SEC6 → SEC7 → SEC8DEF → SEC8EXEC → SEC9 → STRESS → RESUMEN → CONCLUSIONES
+
+Results are saved to Google Drive after each dataset completes. If the Colab session is interrupted, checkpoints preserve already computed data.
+
+---
+
+## Cite this work
 
 ```bibtex
 @misc{herrera2026federated,
   title   = {Federated Naive Bayes with Real Mixture of Gaussians
              and Institutional Governance Regularization
              for Network Intrusion Detection},
-  author  = {Herrera Logrono, Edgar Oswaldo},
+  author  = {Herrera-Logro\~{n}o, Edgar Oswaldo and
+             L\'{o}pez-Rubio, Ezequiel and
+             Ortiz-de-Lazcano-Lobato, Juan Miguel},
   year    = {2026},
-  note    = {arXiv:2605.18647}
+  note    = {arXiv:2605.18647. Submitted to Journal of Network
+             and Computer Applications, Elsevier.}
 }
 ```
