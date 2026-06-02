@@ -3,7 +3,7 @@
 **EJD-UMA-FedNB-GRC v2.3**  
 Edgar Oswaldo Herrera Logrono, M.Sc. IA, VIU Espana  
 Candidato Doctoral - Universidad de Malaga  
-Directores: Prof. Ezequiel Lopez Rubio · Prof. Juan Miguel Ortiz de Lazcano Lobato
+
 
 Preprint: [arXiv:2605.18647](https://arxiv.org/abs/2605.18647)
 
